@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clash Pro - Multi-Sheet Scanner</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" class="overlay">
+    <div class="login-card">
+        <h2>CLASH PRO</h2>
+        <p>Login to Access your dashboard</p>
+        <input type="email" id="user" placeholder="Email">
+        <input type="password" id="pass" placeholder="Password">
+
+        <button type="button" onclick="initSystem(event)">Login</button>
+
+        <div class="forgot-link">
+            <a href="#" onclick="openForgotScreen(event)">Forgot Password?</a>
+        </div>
+    </div>
+</div>
+
+<!-- FORGOT PASSWORD -->
+<div id="forgotScreen" class="overlay" style="display:none;">
+    <div class="login-card">
+        <h2>Reset Password</h2>
+        <p>Enter your email to receive OTP</p>
+
+        <input type="email" id="fpEmail" placeholder="Registered Email">
+
+        <button type="button" onclick="sendOtp()">Send OTP</button>
+
+        <p id="otpTimer" style="margin:10px 0; font-weight:bold;"></p>
+
+        <input type="text" id="fpOtp" placeholder="Enter OTP">
+        <button type="button" onclick="verifyOtp()">Verify OTP</button>
+
+        <input type="password" id="fpNewPass" placeholder="New Password">
+        <button type="button" onclick="resetPassword()">Reset Password</button>
+
+        <button type="button" onclick="backToLogin()">Back</button>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboardPage" style="display:none;">
+
+    <div class="header">
+        <h2>Clash Pro Dashboard</h2>
+        <button class="btn-logout" type="button" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="stats-container">
+
+        <div class="stat-box">
+            <h4>Upload Schedule</h4>
+
+            <input type="file" id="excelFile" accept=".xlsx,.xls">
+
+            <button type="button" onclick="processExcel()">Scan All Sheets</button>
+            <button type="button" onclick="autoFixAll()">Auto Fix All Clashes</button>
+            <button type="button" onclick="downloadFixedTimetable()">Download Updated Timetable</button>
+            <button type="button" onclick="sendToBackend()">Send To Backend</button>
+        </div>
+
+        <div class="stat-box">
+            <h4>Overview</h4>
+
+            <p>Total Valid Entries: <span id="totalRows">0</span></p>
+            <p>Clashes Detected: <span id="totalClashes">0</span></p>
+            <p>Auto Fixed: <span id="fixedCount">0</span></p>
+            <p>Skipped: <span id="skippedRows">0</span></p>
+        </div>
+
+    </div>
+
+    <h3 class="section-title">All Timetable Data</h3>
+
+    <div class="search-box">
+        <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search subject, faculty, day, room..." 
+            onkeyup="searchTable()"
+        >
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Day / Slot</th>
+                    <th>Subject</th>
+                    <th>Room</th>
+                    <th>Conflict</th>
+                    <th>Fix</th>
+                </tr>
+            </thead>
+            <tbody id="dataTableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="emptyState" class="empty-state">
+        ⚡ No timetable loaded yet. Upload Excel and scan all sheets.
+    </div>
+
+    <h3 class="section-title">Clashes</h3>
+
+    <div class="table-wrapper">
+        <table>
+            <tbody id="clashTableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="clashEmptyState" class="empty-state">
+        ✅ No clashes detected yet.
+    </div>
+
+    <h3 class="section-title">Fixed</h3>
+
+    <div class="table-wrapper">
+        <table>
+            <tbody id="fixedTableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="fixedEmptyState" class="empty-state">
+        🛠️ No fixes applied yet.
+    </div>
+
+    <div class="chart-container">
+        <canvas id="chart"></canvas>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
