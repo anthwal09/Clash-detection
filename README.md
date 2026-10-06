@@ -22,6 +22,6 @@ ____Features____
 
 ### Run Locally
 
-1. **Repository clone karein:**
+
    ```bash
    git clone [https://github.com/anthwal09/Clash-detection.git](https://github.com/anthwal09/Clash-detection.git)
